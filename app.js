@@ -3,6 +3,7 @@
           CATEGORIES, QUIPS, COLORS } = Wheel;
   const $ = id => document.getElementById(id);
   const cv = $('cv'), ctx = cv.getContext('2d');
+  const FONT = '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
 
   let names = [];
   let rot = 0;            // 돌림판이 돌아간 각도
@@ -44,7 +45,7 @@
 
   // ---------- 돌림판 그리기 ----------
   function resize() {
-    const size = Math.min(420, window.innerWidth - 36);
+    const size = Math.min(360, window.innerWidth - 40);
     const dpr = window.devicePixelRatio || 1;
     cv.style.width = size + 'px';
     cv.style.height = size + 'px';
@@ -60,16 +61,15 @@
     ctx.clearRect(0, 0, w, w);
 
     // 바깥 테두리
-    ctx.beginPath(); ctx.arc(cx, cy, r + 5, 0, TAU);
-    ctx.fillStyle = '#000'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, r + 3, 0, TAU);
+    ctx.fillStyle = '#e4e1da'; ctx.fill();
 
     if (names.length === 0) {
       ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU);
-      ctx.fillStyle = '#eee'; ctx.fill();
-      ctx.fillStyle = '#777'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.font = `bold ${Math.round(w * 0.045)}px inherit`;
-      ctx.fillText('위에서 먼저', cx, cy - 14);
-      ctx.fillText('후보를 넣어주세요', cx, cy + 14);
+      ctx.fillStyle = '#f2f0ec'; ctx.fill();
+      ctx.fillStyle = '#8b857c'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `${Math.round(w * 0.042)}px ${FONT}`;
+      ctx.fillText('후보를 먼저 넣어주세요', cx, cy);
       return;
     }
 
@@ -82,7 +82,7 @@
       ctx.closePath();
       ctx.fillStyle = COLORS[i % COLORS.length];
       ctx.fill();
-      ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.stroke();
+      ctx.lineWidth = 1.5; ctx.strokeStyle = '#fff'; ctx.stroke();
 
       // 글씨는 조각 가운데를 따라 바깥쪽으로 눕힌다
       ctx.save();
@@ -90,21 +90,16 @@
       ctx.rotate(a0 + slice / 2);
       ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       const size = Math.max(11, Math.min(22, Math.round(w * 0.055) - Math.max(0, n - 6)));
-      ctx.font = `bold ${size}px 궁서, 궁서체, GungSuh, AppleMyungjo, serif`;
-      ctx.lineWidth = 4; ctx.strokeStyle = '#fff';
-      ctx.strokeText(names[i], r - 14, 0);
-      ctx.fillStyle = '#1a0033';
+      ctx.font = `600 ${size}px ${FONT}`;
+      ctx.fillStyle = '#2c2a27';
       ctx.fillText(names[i], r - 14, 0);
       ctx.restore();
     }
 
-    // 가운데 손잡이
-    ctx.beginPath(); ctx.arc(cx, cy, w * 0.11, 0, TAU);
-    ctx.fillStyle = '#fffbe6'; ctx.fill();
-    ctx.lineWidth = 4; ctx.strokeStyle = '#000'; ctx.stroke();
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = `${Math.round(w * 0.1)}px serif`;
-    ctx.fillText('🍽', cx, cy + 2);
+    // 가운데 축
+    ctx.beginPath(); ctx.arc(cx, cy, w * 0.07, 0, TAU);
+    ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = '#e4e1da'; ctx.stroke();
   }
 
   // ---------- 목록 화면 ----------
@@ -190,7 +185,7 @@
 
   $('sound').addEventListener('click', () => {
     const on = Sfx.toggle();
-    $('sound').textContent = on ? '🔊 소리 켬' : '🔇 소리 끔';
+    $('sound').textContent = on ? '소리 끄기' : '소리 켜기';
   });
 
   $('share').addEventListener('click', async () => {
